@@ -4,15 +4,9 @@
 
   function createGrid(totalWeeks, checkedWeeks) {
     const container = document.getElementById("grid-container")
-    container.innerHTML = ""
 
     // Create header row
-    const headerRow = document.createElement("div")
-    headerRow.className = "grid-header"
-
-    // Add empty cell for top-left corner
-    const cornerCell = document.createElement("div")
-    headerRow.appendChild(cornerCell)
+    const headerRow = document.getElementById("header-row")
 
     // Add column indices
     for (let i = 0; i < 52; i++) {
@@ -77,14 +71,29 @@
     <title>lifespan | weeks</title>
   </head>
   <body>
-    <p>How many weeks until you turn 90?</p>
-    <div id="grid-container" class="grid-container"></div>
+    <div class="side-space"></div>
+    <section>
+      <p class="title">How many weeks until you turn 90?</p>
+      <div id="grid-container" class="grid-container">
+        <div id="header-row" class="grid-header">
+          <div id="corner-cell"></div>
+        </div>
+      </div>
+    </section>
+    <div class="side-space"></div>
   </body>
 </html>
 
 <style>
-  p {
+  body {
+    display: flex;
+  }
+  .title {
     text-align: center;
+  }
+  .side-space {
+    height: 100vh;
+    min-width: 100px;
   }
   .grid-container {
     display: grid;

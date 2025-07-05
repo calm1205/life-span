@@ -65,16 +65,25 @@
     <title>lifespan | months</title>
   </head>
   <body>
-    <p>How many months until you turn 90?</p>
-    <div id="grid-container" class="grid-container"></div>
+    <div class="side-space"></div>
+    <section>
+      <p class="title">How many months until you turn 90?</p>
+      <div id="grid-container" class="grid-container"></div>
+    </section>
+    <div class="side-space"></div>
   </body>
 </html>
 
 <style>
   body {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+  }
+  .side-space {
+    height: 100vh;
+    min-width: 200px;
+  }
+  .title {
+    text-align: center;
   }
   .grid-container {
     display: grid;
