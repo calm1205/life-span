@@ -14,17 +14,14 @@
     <div id="hours-display"></div>
 
     <script type="module">
-      import { getAge } from "./js/getAge.js"
-      import { getQueryDate } from "./js/getQueryDate.js"
+      import { RemainTime } from "./js/remainTime.js"
 
       function displayHours() {
-        const birthDate = getQueryDate()
+        const remainTime = new RemainTime()
+        const hours = remainTime.hours
 
-        if (birthDate) {
-          const age = getAge(birthDate)
-          const hours = age * 365 * 24
-          document.getElementById("hours-display").textContent =
-            `${hours} hours`
+        if (hours) {
+          document.getElementById("hours-display").textContent = `${hours} hours`
         } else {
           window.location.href = `index.html`
         } 
