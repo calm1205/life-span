@@ -76,97 +76,97 @@
       <button id="weeks-button" type="button">weeks</button>
       <button id="months-button" type="button">months</button>
     </div>
+
+    <script>
+    // 現在の日付を取得
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth() + 1
+    const currentDay = now.getDate()
+
+    // 年の選択肢を生成（現在から100年前まで）
+    const yearSelect = document.getElementById("year")
+    for (let year = currentYear; year >= currentYear - 100; year--) {
+      const option = document.createElement("option")
+      option.value = year
+      option.textContent = year
+      yearSelect.appendChild(option)
+    }
+
+    // 月が変更されたときに日の選択肢を更新
+    const monthSelect = document.getElementById("month")
+    const daySelect = document.getElementById("day")
+
+    monthSelect.addEventListener("change", updateDays)
+    yearSelect.addEventListener("change", updateDays)
+
+    function updateDays() {
+      const year = parseInt(yearSelect.value, 10)
+      const month = parseInt(monthSelect.value, 10)
+      const daysInMonth = new Date(year, month, 0).getDate()
+
+      // 現在の選択された日を保存
+      const selectedDay = parseInt(daySelect.value, 10)
+
+      // 日の選択肢をクリア
+      daySelect.innerHTML = ""
+
+      // 新しい日の選択肢を生成
+      for (let day = 1; day <= daysInMonth; day++) {
+        const option = document.createElement("option")
+        option.value = day
+        option.textContent = day
+        if (day === selectedDay && day <= daysInMonth) {
+          option.selected = true
+        }
+        daySelect.appendChild(option)
+      }
+    }
+
+    // 初期表示時の年は 2000 年をデフォルトにする（範囲外なら現在年）
+    const defaultYear = 2000
+    if (defaultYear <= currentYear && defaultYear >= currentYear - 100) {
+      yearSelect.value = defaultYear
+    } else {
+      yearSelect.value = currentYear
+    }
+    monthSelect.value = currentMonth
+
+    document.getElementById("hours-button").addEventListener("click", (e) => {
+      e.preventDefault()
+      const year = yearSelect.value
+      const month = monthSelect.value
+      const day = daySelect.value
+
+      window.location.href = `hour.html?year=${year}&month=${month}&day=${day}`
+    })
+
+    daySelect.value = currentDay
+
+    document.getElementById("days-button").addEventListener("click", (e) => {
+      e.preventDefault()
+      const year = yearSelect.value
+      const month = monthSelect.value
+      const day = daySelect.value
+
+      window.location.href = `day.html?year=${year}&month=${month}&day=${day}`
+    })
+
+    document.getElementById("weeks-button").addEventListener("click", (e) => {
+      e.preventDefault()
+      const year = yearSelect.value
+      const month = monthSelect.value
+      const day = daySelect.value
+      window.location.href = `week.html?year=${year}&month=${month}&day=${day}`
+    })
+
+    document.getElementById("months-button").addEventListener("click", (e) => {
+      e.preventDefault()
+      const year = yearSelect.value
+      const month = monthSelect.value
+      const day = daySelect.value
+      window.location.href = `month.html?year=${year}&month=${month}&day=${day}`
+    })
+    </script>
   </body>
 </html>
-
-<script>
-// 現在の日付を取得
-const now = new Date()
-const currentYear = now.getFullYear()
-const currentMonth = now.getMonth() + 1
-const currentDay = now.getDate()
-
-// 年の選択肢を生成（現在から100年前まで）
-const yearSelect = document.getElementById("year")
-for (let year = currentYear; year >= currentYear - 100; year--) {
-  const option = document.createElement("option")
-  option.value = year
-  option.textContent = year
-  yearSelect.appendChild(option)
-}
-
-// 月が変更されたときに日の選択肢を更新
-const monthSelect = document.getElementById("month")
-const daySelect = document.getElementById("day")
-
-monthSelect.addEventListener("change", updateDays)
-yearSelect.addEventListener("change", updateDays)
-
-function updateDays() {
-  const year = parseInt(yearSelect.value, 10)
-  const month = parseInt(monthSelect.value, 10)
-  const daysInMonth = new Date(year, month, 0).getDate()
-
-  // 現在の選択された日を保存
-  const selectedDay = parseInt(daySelect.value, 10)
-
-  // 日の選択肢をクリア
-  daySelect.innerHTML = ""
-
-  // 新しい日の選択肢を生成
-  for (let day = 1; day <= daysInMonth; day++) {
-    const option = document.createElement("option")
-    option.value = day
-    option.textContent = day
-    if (day === selectedDay && day <= daysInMonth) {
-      option.selected = true
-    }
-    daySelect.appendChild(option)
-  }
-}
-
-// 初期表示時の年は 2000 年をデフォルトにする（範囲外なら現在年）
-const defaultYear = 2000
-if (defaultYear <= currentYear && defaultYear >= currentYear - 100) {
-  yearSelect.value = defaultYear
-} else {
-  yearSelect.value = currentYear
-}
-monthSelect.value = currentMonth
-
-document.getElementById("hours-button").addEventListener("click", (e) => {
-  e.preventDefault()
-  const year = yearSelect.value
-  const month = monthSelect.value
-  const day = daySelect.value
-
-  window.location.href = `hour.html?year=${year}&month=${month}&day=${day}`
-})
-
-daySelect.value = currentDay
-
-document.getElementById("days-button").addEventListener("click", (e) => {
-  e.preventDefault()
-  const year = yearSelect.value
-  const month = monthSelect.value
-  const day = daySelect.value
-
-  window.location.href = `day.html?year=${year}&month=${month}&day=${day}`
-})
-
-document.getElementById("weeks-button").addEventListener("click", (e) => {
-  e.preventDefault()
-  const year = yearSelect.value
-  const month = monthSelect.value
-  const day = daySelect.value
-  window.location.href = `week.html?year=${year}&month=${month}&day=${day}`
-})
-
-document.getElementById("months-button").addEventListener("click", (e) => {
-  e.preventDefault()
-  const year = yearSelect.value
-  const month = monthSelect.value
-  const day = daySelect.value
-  window.location.href = `month.html?year=${year}&month=${month}&day=${day}`
-})
-</script>
