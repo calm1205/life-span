@@ -5,3 +5,9 @@
 ```bash
 docker compose watch
 ```
+
+## deploy
+
+```bash
+npm run deploy
+```
