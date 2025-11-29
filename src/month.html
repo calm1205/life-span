@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:central;text-anchor:middle;font-size:90px;%22>❤️‍🔥</text></svg>"
-    />
+    >
     <title>lifespan | months</title>
     <style>
-      body {
-        display: flex;
-      }
-      .side-space {
-        height: 100vh;
-        min-width: 200px;
-      }
-      .title {
-        text-align: center;
-      }
-      .grid-container {
-        display: grid;
-        grid-template-columns: 40px repeat(12, 20px);
-        gap: 4px;
-        padding: 20px;
-      }
-      .header-row {
-        display: contents;
-      }
-      .month-label {
-        text-align: center;
-        font-size: 12px;
-      }
-      .year-row {
-        display: contents;
-      }
-      .year-label {
-        text-align: right;
-        padding-right: 8px;
-        font-size: 12px;
-      }
+    body {
+      display: flex;
+    }
+    .side-space {
+      height: 100vh;
+      min-width: 200px;
+    }
+    .title {
+      text-align: center;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 40px repeat(12, 20px);
+      gap: 4px;
+      padding: 20px;
+    }
+    .header-row {
+      display: contents;
+    }
+    .month-label {
+      text-align: center;
+      font-size: 12px;
+    }
+    .year-row {
+      display: contents;
+    }
+    .year-label {
+      text-align: right;
+      padding-right: 8px;
+      font-size: 12px;
+    }
     </style>
   </head>
   <body>
@@ -50,22 +50,22 @@
     </section>
     <div class="side-space"></div>
     <script type="module">
-      import { getAge } from "./js/getAge.js"
-      import { getQueryDate } from "./js/getQueryDate.js"
-      import { monthsFromLastBirthday } from "./js/monthsFromLastBirthday.js"
+    import { getAge } from "./js/getAge.js"
+    import { getQueryDate } from "./js/getQueryDate.js"
+    import { monthsFromLastBirthday } from "./js/monthsFromLastBirthday.js"
 
-      const MAX_AGE = 90
-      const MONTHS_PER_YEAR = 12
-      const TOTAL_MONTHS = MAX_AGE * MONTHS_PER_YEAR
+    const MAX_AGE = 90
+    const MONTHS_PER_YEAR = 12
+    const TOTAL_MONTHS = MAX_AGE * MONTHS_PER_YEAR
 
-      function createGrid(birthDate) {
-        const age = getAge(birthDate)
-        const container = document.getElementById("grid-container")
-        const months = monthsFromLastBirthday(birthDate)
-        const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
+    function createGrid(birthDate) {
+      const age = getAge(birthDate)
+      const container = document.getElementById("grid-container")
+      const months = monthsFromLastBirthday(birthDate)
+      const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
 
-        // ヘッダー（corner + 1〜12ヶ月）
-        const headerHtml = `
+      // ヘッダー（corner + 1〜12ヶ月）
+      const headerHtml = `
           <div class="header-row">
             <div class="corner-cell"></div>
             ${Array.from(
@@ -75,45 +75,45 @@
           </div>
         `
 
-        // 各年（row）の行
-        const rowsHtml = Array.from({ length: rows }, (_, year) => {
-          const monthCells = Array.from(
-            { length: MONTHS_PER_YEAR },
-            (_, monthIndexInYear) => {
-              const checked = (() => {
-                if (year < age) return "checked"
-                if (year === age && monthIndexInYear < months) return "checked"
-                return ""
-              })()
+      // 各年（row）の行
+      const rowsHtml = Array.from({ length: rows }, (_, year) => {
+        const monthCells = Array.from(
+          { length: MONTHS_PER_YEAR },
+          (_, monthIndexInYear) => {
+            const checked = (() => {
+              if (year < age) return "checked"
+              if (year === age && monthIndexInYear < months) return "checked"
+              return ""
+            })()
 
-              return `
+            return `
                 <input type="checkbox" disabled ${checked} />
               `
-            },
-          ).join("")
+          },
+        ).join("")
 
-          return `
+        return `
             <div class="year-row">
               <div class="year-label">${year}</div>
               ${monthCells}
             </div>
           `
-        }).join("")
+      }).join("")
 
-        container.innerHTML = headerHtml + rowsHtml
+      container.innerHTML = headerHtml + rowsHtml
+    }
+
+    function displayMonths() {
+      const birthDate = getQueryDate()
+
+      if (birthDate) {
+        createGrid(birthDate)
+      } else {
+        window.location.href = `index.html`
       }
+    }
 
-      function displayMonths() {
-        const birthDate = getQueryDate()
-
-        if (birthDate) {
-          createGrid(birthDate)
-        } else {
-          window.location.href = `index.html`
-        }
-      }
-
-      window.onload = displayMonths
+    window.onload = displayMonths
     </script>
   </body>
 </html>
