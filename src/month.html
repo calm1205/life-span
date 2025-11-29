@@ -25,9 +25,15 @@
         gap: 4px;
         padding: 20px;
       }
+      .header-row {
+        display: contents;
+      }
       .month-label {
         text-align: center;
         font-size: 12px;
+      }
+      .year-row {
+        display: contents;
       }
       .year-label {
         text-align: right;
@@ -44,58 +50,70 @@
     </section>
     <div class="side-space"></div>
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
-      import { calculateMonths } from "./js/calculateMonths.js"
+      import { getAge } from "./js/getAge.js"
+      import { getQueryDate } from "./js/getQueryDate.js"
+      import { monthsFromLastBirthday } from "./js/monthsFromLastBirthday.js"
 
-      function createGrid(_totalMonths, checkedMonths) {
+      const MAX_AGE = 90
+      const MONTHS_PER_YEAR = 12
+      const TOTAL_MONTHS = MAX_AGE * MONTHS_PER_YEAR
+
+      function createGrid(birthDate) {
+        const age = getAge(birthDate)
         const container = document.getElementById("grid-container")
-        container.innerHTML = ""
+        const months = monthsFromLastBirthday(birthDate)
+        const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
 
-        const cornerCell = document.createElement("div")
-        container.appendChild(cornerCell)
+        // ヘッダー（corner + 1〜12ヶ月）
+        const headerHtml = `
+          <div class="header-row">
+            <div class="corner-cell"></div>
+            ${Array.from(
+              { length: MONTHS_PER_YEAR },
+              (_, i) => `<div class="month-label">${i + 1}</div>`,
+            ).join("")}
+          </div>
+        `
 
-        for (let month = 1; month <= 12; month++) {
-          const monthLabel = document.createElement("div")
-          monthLabel.className = "month-label"
-          monthLabel.textContent = month
-          container.appendChild(monthLabel)
-        }
+        // 各年（row）の行
+        const rowsHtml = Array.from({ length: rows }, (_, year) => {
+          const monthCells = Array.from(
+            { length: MONTHS_PER_YEAR },
+            (_, monthIndexInYear) => {
+              const checked = (() => {
+                if (year < age) return "checked"
+                if (year === age && monthIndexInYear < months) return "checked"
+                return ""
+              })()
 
-        // Add year rows with checkboxes
-        for (let year = 0; year < 90; year++) {
-          // Add year label
-          const yearLabel = document.createElement("div")
-          yearLabel.className = "year-label"
-          yearLabel.textContent = year
-          container.appendChild(yearLabel)
+              return `
+                <input type="checkbox" disabled ${checked} />
+              `
+            },
+          ).join("")
 
-          // Add checkboxes for this year
-          for (let month = 0; month < 12; month++) {
-            const div = document.createElement("div")
-            const checkbox = document.createElement("input")
-            checkbox.type = "checkbox"
-            const monthIndex = year * 12 + month
-            checkbox.checked = monthIndex < checkedMonths
-            checkbox.disabled = true
+          return `
+            <div class="year-row">
+              <div class="year-label">${year}</div>
+              ${monthCells}
+            </div>
+          `
+        }).join("")
 
-            div.appendChild(checkbox)
-            container.appendChild(div)
-          }
-        }
+        container.innerHTML = headerHtml + rowsHtml
       }
 
-      function displayAge() {
-        const { year, month, day } = getBirthParams()
+      function displayMonths() {
+        const birthDate = getQueryDate()
 
-        if (year && month && day) {
-          const months = calculateMonths(year, month, day)
-          createGrid(90 * 12, months)
+        if (birthDate) {
+          createGrid(birthDate)
         } else {
           window.location.href = `index.html`
         }
       }
 
-      window.onload = displayAge
+      window.onload = displayMonths
     </script>
   </body>
 </html>

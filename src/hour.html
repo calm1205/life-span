@@ -14,24 +14,23 @@
     <div id="hours-display"></div>
 
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
-      import { calculateDays } from "./js/calculateDays.js"
+      import { getAge } from "./js/getAge.js"
+      import { getQueryDate } from "./js/getQueryDate.js"
 
-      function displayAge() {
-        const { year, month, day } = getBirthParams()
+      function displayHours() {
+        const birthDate = getQueryDate()
 
-        if (year && month && day) {
-          const days = calculateDays(year, month, day)
-          const remainingDays = 90 * 365 - days
-          const remainingHours = remainingDays * 24
+        if (birthDate) {
+          const age = getAge(birthDate)
+          const hours = age * 365 * 24
           document.getElementById("hours-display").textContent =
-            `${remainingHours} hours`
+            `${hours} hours`
         } else {
           window.location.href = `index.html`
-        }
+        } 
       }
 
-      window.onload = displayAge
+      window.onload = displayHours
     </script>
   </body>
 </html>

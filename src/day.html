@@ -14,20 +14,23 @@
     <div id="days-display"></div>
 
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
       import { calculateDays } from "./js/calculateDays.js"
+      import { getQueryDate } from "./js/getQueryDate.js"
+
+      const LIFE_EXPECTANCY_YEARS = 90
+      const DAYS_IN_YEAR = 365
 
       function displayAge() {
-        const { year, month, day } = getBirthParams()
+        const birthDate = getQueryDate()
 
-        if (year && month && day) {
-          const days = calculateDays(year, month, day)
-          const remainingDays = 90 * 365 - days
+        if (birthDate) {
+          const days = calculateDays(birthDate)
+          const remainingDays = LIFE_EXPECTANCY_YEARS * DAYS_IN_YEAR - days
           document.getElementById("days-display").textContent =
             `${remainingDays} days`
         } else {
           window.location.href = `index.html`
-        }
+        } 
       }
 
       window.onload = displayAge

@@ -9,6 +9,10 @@
     />
     <title>lifespan | weeks</title>
     <style>
+      :root {
+        --weeks-per-year: 52;
+        --max-age: 90;
+      }
       body {
         display: flex;
       }
@@ -22,7 +26,7 @@
       .grid-container {
         display: grid;
         place-items: center;
-        grid-template-columns: 40px repeat(52, 20px);
+        grid-template-columns: 40px repeat(var(--weeks-per-year), 20px);
         gap: 4px;
         padding: 20px;
       }
@@ -42,6 +46,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="side-space"></div>
     <section>
@@ -54,64 +59,68 @@
     </section>
     <div class="side-space"></div>
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
-      import { calculateWeeks } from "./js/calculateWeeks.js"
+      import { getAge } from "./js/getAge.js"
+      import { getQueryDate } from "./js/getQueryDate.js"
+      import { weeksFromLastBirthday } from "./js/weeksFromLastBirthday.js"
 
-      function createGrid(totalWeeks, checkedWeeks) {
+      const MAX_AGE = 90
+      const WEEKS_PER_YEAR = 52
+      const TOTAL_WEEKS = MAX_AGE * WEEKS_PER_YEAR
+
+      function createGrid(birthDate) {
+        const age = getAge(birthDate)
         const container = document.getElementById("grid-container")
+        const weeks = weeksFromLastBirthday(birthDate)
+        const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
 
-        // Create header row
-        const headerRow = document.getElementById("header-row")
+        // ヘッダー行（corner + 1〜52）
+        const headerHtml = `
+          <div id="header-row" class="grid-header">
+            <div id="corner-cell"></div>
+            ${Array.from({ length: WEEKS_PER_YEAR }, (_, i) => `<div>${i + 1}</div>`).join("")}
+          </div>
+        `
 
-        // Add column indices
-        for (let i = 0; i < 52; i++) {
-          const headerCell = document.createElement("div")
-          headerCell.textContent = i + 1
-          headerRow.appendChild(headerCell)
-        }
-        container.appendChild(headerRow)
+        // 各年（row）の行
+        const rowsHtml = Array.from({ length: rows }, (_, row) => {
+          const weekCells = Array.from({ length: WEEKS_PER_YEAR }, (_, col) => {
 
-        // Create grid rows
-        const rows = Math.ceil(totalWeeks / 52)
-        for (let row = 0; row < rows; row++) {
-          const gridRow = document.createElement("div")
-          gridRow.className = "grid-row"
+            const checked = (()=>{
+              if(row < age) return "checked"
+              if(row === age && col < weeks) return "checked"
+              return ""
+            })()
 
-          // Add row index
-          const rowIndex = document.createElement("div")
-          rowIndex.className = "row-index"
-          rowIndex.textContent = row
-          gridRow.appendChild(rowIndex)
+            return `
+              <div>
+                <input type="checkbox" disabled ${checked} />
+              </div>
+            `
+          }).join("")
 
-          // Add checkboxes
-          for (let col = 0; col < 52; col++) {
-            const weekIndex = row * 52 + col
-            if (weekIndex < totalWeeks) {
-              const cell = document.createElement("div")
-              const checkbox = document.createElement("input")
-              checkbox.type = "checkbox"
-              checkbox.checked = weekIndex < checkedWeeks
-              checkbox.disabled = true
-              cell.appendChild(checkbox)
-              gridRow.appendChild(cell)
-            }
-          }
-          container.appendChild(gridRow)
-        }
+          return `
+            <div class="grid-row">
+              <div class="row-index">${row}</div>
+              ${weekCells}
+            </div>
+          `
+        }).join("")
+
+        // コンテナにまとめて流し込む
+        container.innerHTML = headerHtml + rowsHtml
       }
 
-      function displayAge() {
-        const { year, month, day } = getBirthParams()
+      function displayWeeks() {
+        const birthDate = getQueryDate()
 
-        if (year && month && day) {
-          const weeks = calculateWeeks(year, month, day)
-          createGrid(90 * 52, weeks)
+        if (birthDate) {
+          createGrid(birthDate)
         } else {
           window.location.href = `index.html`
         }
       }
 
-      window.onload = displayAge
+      window.onload = displayWeeks
     </script>
   </body>
 </html>
