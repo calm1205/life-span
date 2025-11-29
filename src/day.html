@@ -14,7 +14,7 @@
     <div id="days-display"></div>
 
     <script type="module">
-      import { calculateDays } from "./js/calculateDays.js"
+      import { daysSinceBirth } from "./js/daysSinceBirth.js"
       import { getQueryDate } from "./js/getQueryDate.js"
 
       const LIFE_EXPECTANCY_YEARS = 90
@@ -24,7 +24,7 @@
         const birthDate = getQueryDate()
 
         if (birthDate) {
-          const days = calculateDays(birthDate)
+          const days = daysSinceBirth(birthDate)
           const remainingDays = LIFE_EXPECTANCY_YEARS * DAYS_IN_YEAR - days
           document.getElementById("days-display").textContent =
             `${remainingDays} days`
