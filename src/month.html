@@ -49,10 +49,11 @@
       <div id="grid-container" class="grid-container"></div>
     </section>
     <div class="side-space"></div>
+
     <script type="module">
+    import { ElapsedTime } from "./js/elapsedTime.js"
     import { getAge } from "./js/getAge.js"
     import { getQueryDate } from "./js/getQueryDate.js"
-    import { monthsFromLastBirthday } from "./js/monthsFromLastBirthday.js"
 
     const MAX_AGE = 90
     const MONTHS_PER_YEAR = 12
@@ -61,7 +62,7 @@
     function createGrid(birthDate) {
       const age = getAge(birthDate)
       const container = document.getElementById("grid-container")
-      const months = monthsFromLastBirthday(birthDate)
+      const months = new ElapsedTime(birthDate).months
       const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
 
       // ヘッダー（corner + 1〜12ヶ月）

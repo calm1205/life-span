@@ -58,10 +58,11 @@
       </div>
     </section>
     <div class="side-space"></div>
+
     <script type="module">
+    import { ElapsedTime } from "./js/elapsedTime.js"
     import { getAge } from "./js/getAge.js"
     import { getQueryDate } from "./js/getQueryDate.js"
-    import { weeksFromLastBirthday } from "./js/weeksFromLastBirthday.js"
 
     const MAX_AGE = 90
     const WEEKS_PER_YEAR = 52
@@ -70,7 +71,7 @@
     function createGrid(birthDate) {
       const age = getAge(birthDate)
       const container = document.getElementById("grid-container")
-      const weeks = weeksFromLastBirthday(birthDate)
+      const weeks = new ElapsedTime(birthDate).weeks
       const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
 
       // ヘッダー行（corner + 1〜52）
