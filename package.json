@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "check": "biome check .",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "deploy": "gh workflow run deploy.yml"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
