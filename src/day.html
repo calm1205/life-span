@@ -24,7 +24,7 @@
           const days = calculateDays(year, month, day)
           const remainingDays = 90 * 365 - days
           document.getElementById("days-display").textContent =
-            remainingDays + " days"
+            `${remainingDays} days`
         } else {
           window.location.href = `index.html`
         }
