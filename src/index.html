@@ -19,57 +19,15 @@
     </style>
   </head>
   <body>
-    <p>input your birth date</p>
-    <input type="date" id="birthday" name="birthday">
     <form onsubmit="return false">
-      <select name="year" id="year"></select>
-      <select name="month" id="month" value="1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-      </select>
-      <select name="day" id="day" value="1">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-        <option value="21">21</option>
-        <option value="22">22</option>
-        <option value="23">23</option>
-        <option value="24">24</option>
-        <option value="25">25</option>
-        <option value="26">26</option>
-        <option value="27">27</option>
-        <option value="28">28</option>
-        <option value="29">29</option>
-        <option value="30">30</option>
-        <option value="31">31</option>
-      </select>
+      <label for="birthday">Birthday:</label>
+      <input
+        type="date"
+        id="birthday"
+        name="birthday"
+        value="2000-01-01"
+        min="1900-01-01"
+      >
     </form>
     <div>
       <button id="hours-button" type="button">hours</button>
@@ -78,33 +36,20 @@
       <button id="months-button" type="button">months</button>
     </div>
 
-    <script type="module">
-    import { yearRange } from "./js/yearRange.js"
-
-    const yearSelect = document.getElementById("year")
-    const monthSelect = document.getElementById("month")
-    const daySelect = document.getElementById("day")
-
-    // yearの選択肢を生成
-    yearSelect.innerHTML = yearRange()
-      .map((year) => `<option value="${year}">${year}</option>`)
-      .join("")
-
-    // 初期表示時の年は 2000 年をデフォルトにする（範囲外なら現在年）
-    const DEFAULT_YEAR = 2000
-    const now = new Date()
-    const currentYear = now.getFullYear()
-    if (DEFAULT_YEAR <= currentYear && DEFAULT_YEAR >= currentYear - 100) {
-      yearSelect.value = DEFAULT_YEAR
-    } else {
-      yearSelect.value = currentYear
-    }
+    <script>
+    const MAX_AGE = 90
+    const today = new Date()
+    const minYear = today.getFullYear() - MAX_AGE
+    const birthdaySelect = document.getElementById("birthday")
+    birthdaySelect.min = `${minYear}-01-01`
 
     const navigate = (path) => (e) => {
       e.preventDefault()
-      const year = yearSelect.value
-      const month = monthSelect.value
-      const day = daySelect.value
+      const birthday = birthdaySelect.value
+      const birthdayDate = new Date(birthday)
+      const year = birthdayDate.getFullYear()
+      const month = birthdayDate.getMonth() + 1
+      const day = birthdayDate.getDate()
       window.location.href = `${path}.html?year=${year}&month=${month}&day=${day}`
     }
 
