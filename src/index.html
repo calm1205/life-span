@@ -116,8 +116,13 @@
     }
   }
 
-  // 初期表示時に現在の日付を選択
-  yearSelect.value = currentYear
+  // 初期表示時の年は 2000 年をデフォルトにする（範囲外なら現在年）
+  const defaultYear = 2000
+  if (defaultYear <= currentYear && defaultYear >= currentYear - 100) {
+    yearSelect.value = defaultYear
+  } else {
+    yearSelect.value = currentYear
+  }
   monthSelect.value = currentMonth
 
   document
