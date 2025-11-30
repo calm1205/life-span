@@ -45,6 +45,15 @@
       min-height: fit-content;
       margin: 0;
     }
+    .week-cell {
+      width: 10px;
+      height: 10px;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+    }
+    .week-cell.checked {
+      background-color: lightgray;
+    }
     .row-index {
       text-align: right;
       font-size: 12px;
@@ -102,7 +111,8 @@
               return ""
             })()
 
-            return `<input type="checkbox" disabled ${checked} />`
+            // return `<input type="checkbox" disabled ${checked} />`
+            return `<div class="week-cell ${checked}"></div>`
           })
           .join("")
 
