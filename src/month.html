@@ -34,14 +34,19 @@
     }
     .month-label {
       text-align: center;
-      font-size: 10px;
+      font-size: 12px;
     }
     .year-row {
       display: contents;
     }
-    .year-row > input {
-      height: fit-content;
-      margin: 0;
+    .month-cell {
+      width: 10px;
+      height: 10px;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+    }
+    .month-cell.checked {
+      background-color: lightgray;
     }
     .year-label {
       text-align: right;
@@ -95,7 +100,7 @@
               return ""
             })()
 
-            return `<input type="checkbox" disabled ${checked} />`
+            return `<div class="month-cell ${checked}"></div>`
           },
         ).join("")
         const yearIndex = year % 5 === 0 ? year : "."
