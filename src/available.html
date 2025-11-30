@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:central;text-anchor:middle;font-size:90px;%22>❤️‍🔥</text></svg>"
+    >
+    <title>lifespan | available time</title>
+    <style>
+    :root {
+      --weeks-per-year: 52;
+      --max-age: 90;
+    }
+    body {
+      display: flex;
+    }
+    .title {
+      text-align: center;
+    }
+    .side-space {
+      height: 100vh;
+      min-width: 100px;
+    }
+    .grid-container {
+      display: grid;
+      place-items: center;
+      grid-template-columns: 20px repeat(var(--weeks-per-year), 12px);
+      gap: 4px;
+      padding: 20px;
+    }
+    .grid-header {
+      display: contents;
+    }
+    .grid-header > div {
+      text-align: center;
+      font-size: 12px;
+    }
+    .grid-row {
+      display: contents;
+    }
+    .week-cell {
+      width: 10px;
+      height: 10px;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+    }
+    .week-cell.lived {
+      background-color: lightgray;
+    }
+    .week-cell.sleep {
+      background-color: lightblue;
+    }
+    .week-cell.waste {
+      background-color: lightcoral;
+    }
+    .week-cell.work {
+      background-color: lightgreen;
+    }
+    .row-index {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .time-list {
+      display: inline-block;
+      min-width: 10px;
+      min-height: 10px;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+    }
+    .lived.time-list {
+      background-color: lightgray;
+    }
+    .sleep.time-list {
+      background-color: lightblue;
+    }
+    .waste.time-list {
+      background-color: lightcoral;
+    }
+    .work.time-list {
+      background-color: lightgreen;
+    }
+    </style>
+  </head>
+
+  <body>
+    <div class="side-space"></div>
+    <section>
+      <p class="title">Your available time</p>
+      <ul>
+        <li>
+          Lived: <span class="lived time-list"></span>
+        </li>
+        <li>
+          Sleep: <span class="sleep time-list"></span>
+        </li>
+        <li>
+          Waste: <span class="waste time-list"></span>
+        </li>
+        <li>
+          Work: <span class="work time-list"></span>
+        </li>
+      </ul>
+      <div id="grid-container" class="grid-container">
+        <div id="header-row" class="grid-header">
+          <div id="corner-cell"></div>
+        </div>
+      </div>
+    </section>
+    <div class="side-space"></div>
+
+    <script type="module">
+    import { ElapsedTime } from "./js/elapsedTime.js"
+    import { getAge } from "./js/getAge.js"
+    import { getQueryDate } from "./js/getQueryDate.js"
+    import { getQueryTime } from "./js/getQueryTime.js"
+    import { FREQUENCIES } from "./js/recurringTime.js"
+    import { RecurringTime } from "./js/recurringTime.js"
+
+    const MAX_AGE = 90
+    const WEEKS_PER_YEAR = 52
+    const TOTAL_WEEKS = MAX_AGE * WEEKS_PER_YEAR
+
+    function createGrid(birthDate, sleepTime, wasteTime, workTime) {
+      const age = getAge(birthDate)
+      const container = document.getElementById("grid-container")
+      const elapsedWeeks = new ElapsedTime(birthDate).weeks
+      const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
+      const weekParYears = Array.from(
+        { length: WEEKS_PER_YEAR },
+        (_, i) => i + 1,
+      )
+
+      // ヘッダー行（corner + 1〜52）
+      const headerHtml = `
+          <div id="header-row" class="grid-header">
+            <div id="corner-cell"></div>
+            ${weekParYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
+          </div>
+        `
+
+      const sleepRecurring = new RecurringTime(
+        sleepTime,
+        FREQUENCIES.DAILY,
+        birthDate,
+      )
+      const wasteRecurring = new RecurringTime(
+        wasteTime,
+        FREQUENCIES.DAILY,
+        birthDate,
+      )
+      const workRecurring = new RecurringTime(
+        workTime,
+        FREQUENCIES.WEEKLY,
+        birthDate,
+      )
+
+      const livedWeekCount = age * WEEKS_PER_YEAR + elapsedWeeks
+      const sleepWeekCount = sleepRecurring.getTotalWeeks()
+      const wasteWeekCount = wasteRecurring.getTotalWeeks()
+      const workWeekCount = workRecurring.getTotalWeeks()
+
+      let weekCount = 0
+      const rowsHtml = Array.from({ length: rows }, (_, row) => {
+        const weekCells = weekParYears
+          .map((_) => {
+            const label = (() => {
+              if (weekCount < livedWeekCount) {
+                return "lived"
+              } else if (weekCount < livedWeekCount + sleepWeekCount) {
+                return "sleep"
+              } else if (
+                weekCount <
+                livedWeekCount + sleepWeekCount + wasteWeekCount
+              ) {
+                return "waste"
+              } else if (
+                weekCount <
+                livedWeekCount + sleepWeekCount + wasteWeekCount + workWeekCount
+              ) {
+                return "work"
+              }
+              return ""
+            })()
+            weekCount++
+            return `<div class="week-cell ${label}"></div>`
+          })
+          .join("")
+
+        const rowIndex = row % 5 === 0 ? row : "."
+
+        return `
+            <div class="grid-row">
+              <div class="row-index">${rowIndex}</div>
+              ${weekCells}
+            </div>
+          `
+      }).join("")
+
+      // コンテナにまとめて流し込む
+      container.innerHTML = headerHtml + rowsHtml
+    }
+
+    function displayWeeks() {
+      const birthDate = getQueryDate()
+      const { sleepTime, wasteTime, workTime } = getQueryTime()
+
+      if (birthDate) {
+        createGrid(birthDate, sleepTime, wasteTime, workTime)
+      } else {
+        window.location.href = `index.html`
+      }
+    }
+
+    window.onload = displayWeeks
+    </script>
+  </body>
+</html>

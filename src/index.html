@@ -19,6 +19,7 @@
     </style>
   </head>
   <body>
+    <h1>lifespan</h1>
     <form onsubmit="return false">
       <label for="birthday">Birthday:</label>
       <input
@@ -29,12 +30,57 @@
         min="1900-01-01"
       >
     </form>
+
+    <h2>visualize your lifespan</h2>
     <nav>
       <button id="hours-button" type="button">hours</button>
       <button id="days-button" type="button">days</button>
       <button id="weeks-button" type="button">weeks</button>
       <button id="months-button" type="button">months</button>
     </nav>
+
+    <h2>visualize your available time</h2>
+    <form onsubmit="return false">
+      <div>
+        <label for="sleep-time">Sleep time par day:</label>
+        <input
+          type="number"
+          id="sleep-time"
+          name="sleep-time"
+          value="8"
+          min="0"
+          max="24"
+        >
+      </div>
+
+      <div>
+        <label for="waste-time">Waste time par day:</label>
+        <input
+          type="number"
+          id="waste-time"
+          name="waste-time"
+          value="0"
+          min="0"
+          max="24"
+        >
+      </div>
+
+      <div>
+        <label for="work-time">Work time par week:</label>
+        <input
+          type="number"
+          id="work-time"
+          name="work-time"
+          value="40"
+          min="0"
+          max="168"
+        >
+      </div>
+
+      <button id="visualize-available-time-button" type="button">
+        visualize available time
+      </button>
+    </form>
 
     <script>
     const MAX_AGE = 90
@@ -43,6 +89,7 @@
     const birthdaySelect = document.getElementById("birthday")
     birthdaySelect.min = `${minYear}-01-01`
 
+    // visualize your lifespan
     const navigate = (path) => (e) => {
       e.preventDefault()
       const birthday = birthdaySelect.value
@@ -62,6 +109,24 @@
     daysButton.addEventListener("click", navigate("day"))
     weeksButton.addEventListener("click", navigate("week"))
     monthsButton.addEventListener("click", navigate("month"))
+
+    // visualize your available time
+    const visualizeAvailableTime = (e) => {
+      e.preventDefault()
+      const birthday = birthdaySelect.value
+      const birthdayDate = new Date(birthday)
+      const year = birthdayDate.getFullYear()
+      const month = birthdayDate.getMonth() + 1
+      const day = birthdayDate.getDate()
+      const sleepTime = document.getElementById("sleep-time").value
+      const wasteTime = document.getElementById("waste-time").value
+      const workTime = document.getElementById("work-time").value
+      window.location.href = `available.html?year=${year}&month=${month}&day=${day}&sleepTime=${sleepTime}&wasteTime=${wasteTime}&workTime=${workTime}`
+    }
+
+    document
+      .getElementById("visualize-available-time-button")
+      .addEventListener("click", visualizeAvailableTime)
     </script>
   </body>
 </html>
