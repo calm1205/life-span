@@ -9,6 +9,9 @@
     >
     <title>lifespan | months</title>
     <style>
+    :root {
+      --months-per-year: 12;
+    }
     body {
       display: flex;
     }
@@ -22,7 +25,7 @@
     .grid-container {
       display: grid;
       place-items: center;
-      grid-template-columns: 20px repeat(12, 10px);
+      grid-template-columns: 20px repeat(var(--months-per-year), 12px);
       gap: 4px;
       padding: 20px;
     }
