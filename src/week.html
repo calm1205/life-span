@@ -26,7 +26,7 @@
     .grid-container {
       display: grid;
       place-items: center;
-      grid-template-columns: 40px repeat(var(--weeks-per-year), 20px);
+      grid-template-columns: 20px repeat(var(--weeks-per-year), 10px);
       gap: 4px;
       padding: 20px;
     }
@@ -40,9 +40,14 @@
     .grid-row {
       display: contents;
     }
+    .grid-row > input {
+      height: fit-content;
+      margin: 0;
+    }
     .row-index {
       text-align: right;
       font-size: 12px;
+      line-height: 1;
     }
     </style>
   </head>
@@ -73,34 +78,38 @@
       const container = document.getElementById("grid-container")
       const weeks = new ElapsedTime(birthDate).weeks
       const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
+      const weekParYears = Array.from(
+        { length: WEEKS_PER_YEAR },
+        (_, i) => i + 1,
+      )
 
       // ヘッダー行（corner + 1〜52）
       const headerHtml = `
           <div id="header-row" class="grid-header">
             <div id="corner-cell"></div>
-            ${Array.from({ length: WEEKS_PER_YEAR }, (_, i) => `<div>${i + 1}</div>`).join("")}
+            ${weekParYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
           </div>
         `
 
       // 各年（row）の行
       const rowsHtml = Array.from({ length: rows }, (_, row) => {
-        const weekCells = Array.from({ length: WEEKS_PER_YEAR }, (_, col) => {
-          const checked = (() => {
-            if (row < age) return "checked"
-            if (row === age && col < weeks) return "checked"
-            return ""
-          })()
+        const weekCells = weekParYears
+          .map((col) => {
+            const checked = (() => {
+              if (row < age) return "checked"
+              if (row === age && col < weeks) return "checked"
+              return ""
+            })()
 
-          return `
-              <div>
-                <input type="checkbox" disabled ${checked} />
-              </div>
-            `
-        }).join("")
+            return `<input type="checkbox" disabled ${checked} />`
+          })
+          .join("")
+
+        const rowIndex = row % 5 === 0 ? row : "."
 
         return `
             <div class="grid-row">
-              <div class="row-index">${row}</div>
+              <div class="row-index">${rowIndex}</div>
               ${weekCells}
             </div>
           `

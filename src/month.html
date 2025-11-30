@@ -21,7 +21,8 @@
     }
     .grid-container {
       display: grid;
-      grid-template-columns: 40px repeat(12, 20px);
+      place-items: center;
+      grid-template-columns: 20px repeat(12, 10px);
       gap: 4px;
       padding: 20px;
     }
@@ -30,15 +31,19 @@
     }
     .month-label {
       text-align: center;
-      font-size: 12px;
+      font-size: 10px;
     }
     .year-row {
       display: contents;
     }
+    .year-row > input {
+      height: fit-content;
+      margin: 0;
+    }
     .year-label {
       text-align: right;
-      padding-right: 8px;
       font-size: 12px;
+      line-height: 1;
     }
     </style>
   </head>
@@ -87,15 +92,14 @@
               return ""
             })()
 
-            return `
-                <input type="checkbox" disabled ${checked} />
-              `
+            return `<input type="checkbox" disabled ${checked} />`
           },
         ).join("")
+        const yearIndex = year % 5 === 0 ? year : "."
 
         return `
             <div class="year-row">
-              <div class="year-label">${year}</div>
+              <div class="year-label">${yearIndex}</div>
               ${monthCells}
             </div>
           `
