@@ -6,7 +6,7 @@ import { getQueryDate } from "./getQueryDate.js"
 export class RemainTime {
   #EXPECTANCY_AGE = 90 // 人生の期待年数
   #DAYS_PER_YEAR = 365
-  #HOURS_PER_YEAR = this.#DAYS_PER_YEAR * 24
+  #HOURS_PER_DAY = 24
   #MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24
 
   constructor() {
@@ -22,7 +22,7 @@ export class RemainTime {
 
   /** 残り時間 */
   get hours() {
-    return this.days * this.#HOURS_PER_YEAR
+    return this.days * this.#HOURS_PER_DAY
   }
 
   #daysSinceBirth() {
