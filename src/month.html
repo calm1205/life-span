@@ -48,6 +48,9 @@
     .month-cell.checked {
       background-color: lightgray;
     }
+    .month-cell.current {
+      background-color: lightcoral;
+    }
     .year-label {
       text-align: right;
       font-size: 12px;
@@ -95,6 +98,7 @@
           { length: MONTHS_PER_YEAR },
           (_, monthIndexInYear) => {
             const checked = (() => {
+              if (year === age && monthIndexInYear === months) return "current"
               if (year < age) return "checked"
               if (year === age && monthIndexInYear < months) return "checked"
               return ""
