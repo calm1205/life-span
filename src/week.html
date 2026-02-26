@@ -64,7 +64,7 @@
   <body>
     <div class="side-space"></div>
     <section>
-      <p class="title">How many weeks until you turn 90?</p>
+      <p id="title" class="title"></p>
       <div id="grid-container" class="grid-container">
         <div id="header-row" class="grid-header">
           <div id="corner-cell"></div>
@@ -86,6 +86,9 @@
       const age = getAge(birthDate)
       const container = document.getElementById("grid-container")
       const weeks = new ElapsedTime(birthDate).weeks
+      const elapsedTotal = age * WEEKS_PER_YEAR + weeks
+      const remainWeeks = TOTAL_WEEKS - elapsedTotal
+      document.getElementById("title").textContent = `Remain ${remainWeeks.toLocaleString()} weeks.`
       const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
       const weekParYears = Array.from(
         { length: WEEKS_PER_YEAR },

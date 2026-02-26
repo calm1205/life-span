@@ -62,7 +62,7 @@
   <body>
     <div class="side-space"></div>
     <section>
-      <p class="title">How many months until you turn 90?</p>
+      <p id="title" class="title"></p>
       <div id="grid-container" class="grid-container"></div>
     </section>
     <div class="side-space"></div>
@@ -80,6 +80,9 @@
       const age = getAge(birthDate)
       const container = document.getElementById("grid-container")
       const months = new ElapsedTime(birthDate).months
+      const elapsedTotal = age * MONTHS_PER_YEAR + months
+      const remainMonths = TOTAL_MONTHS - elapsedTotal
+      document.getElementById("title").textContent = `Remain ${remainMonths.toLocaleString()} months.`
       const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
 
       // ヘッダー（corner + 1〜12ヶ月）
