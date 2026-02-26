@@ -17,7 +17,7 @@ export class RecurringTime {
    */
   constructor(hours, frequency = FREQUENCIES.DAILY, birthDate) {
     if (typeof hours !== "number" || Number.isNaN(hours))
-      throw new TypeError("toDate must be a valid Date")
+      throw new TypeError("hours must be a valid number")
     if (!Object.values(FREQUENCIES).includes(frequency))
       throw new Error('frequency must be one of "daily" | "weekly" | "monthly"')
     if (!(birthDate instanceof Date))
