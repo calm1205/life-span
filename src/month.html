@@ -1,88 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:central;text-anchor:middle;font-size:90px;%22>❤️‍🔥</text></svg>"
-    />
+    >
     <title>lifespan | months</title>
     <style>
-      .grid-container {
-        display: grid;
-        grid-template-columns: 40px repeat(12, 20px);
-        gap: 4px;
-        margin-top: 20px;
-      }
-      .month-label {
-        text-align: center;
-        font-size: 12px;
-      }
-      .year-label {
-        text-align: right;
-        padding-right: 8px;
-        font-size: 12px;
-      }
+    :root {
+      --months-per-year: 12;
+    }
+    body {
+      display: flex;
+    }
+    .side-space {
+      height: 100vh;
+      min-width: 200px;
+    }
+    .title {
+      text-align: center;
+    }
+    .grid-container {
+      display: grid;
+      place-items: center;
+      grid-template-columns: 20px repeat(var(--months-per-year), 12px);
+      gap: 4px;
+      padding: 20px;
+    }
+    .header-row {
+      display: contents;
+    }
+    .month-label {
+      text-align: center;
+      font-size: 12px;
+    }
+    .year-row {
+      display: contents;
+    }
+    .month-cell {
+      width: 10px;
+      height: 10px;
+      border: 1px solid lightgray;
+      border-radius: 2px;
+    }
+    .month-cell.checked {
+      background-color: lightgray;
+    }
+    .year-label {
+      text-align: right;
+      font-size: 12px;
+      line-height: 1;
+    }
     </style>
   </head>
   <body>
-    <p>How many months until you turn 90?</p>
-    <div id="grid-container" class="grid-container"></div>
+    <div class="side-space"></div>
+    <section>
+      <p class="title">How many months until you turn 90?</p>
+      <div id="grid-container" class="grid-container"></div>
+    </section>
+    <div class="side-space"></div>
 
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
-      import { calculateMonths } from "./js/calculateMonths.js"
+    import { ElapsedTime } from "./js/elapsedTime.js"
+    import { getAge } from "./js/getAge.js"
+    import { getQueryDate } from "./js/getQueryDate.js"
 
-      function createGrid(totalMonths, checkedMonths) {
-        const container = document.getElementById("grid-container")
-        container.innerHTML = ""
+    const MAX_AGE = 90
+    const MONTHS_PER_YEAR = 12
+    const TOTAL_MONTHS = MAX_AGE * MONTHS_PER_YEAR
 
-        const cornerCell = document.createElement("div")
-        container.appendChild(cornerCell)
+    function createGrid(birthDate) {
+      const age = getAge(birthDate)
+      const container = document.getElementById("grid-container")
+      const months = new ElapsedTime(birthDate).months
+      const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
 
-        for (let month = 1; month <= 12; month++) {
-          const monthLabel = document.createElement("div")
-          monthLabel.className = "month-label"
-          monthLabel.textContent = month
-          container.appendChild(monthLabel)
-        }
+      // ヘッダー（corner + 1〜12ヶ月）
+      const headerHtml = `
+          <div class="header-row">
+            <div class="corner-cell"></div>
+            ${Array.from(
+              { length: MONTHS_PER_YEAR },
+              (_, i) => `<div class="month-label">${i + 1}</div>`,
+            ).join("")}
+          </div>
+        `
 
-        // Add year rows with checkboxes
-        for (let year = 0; year < 90; year++) {
-          // Add year label
-          const yearLabel = document.createElement("div")
-          yearLabel.className = "year-label"
-          yearLabel.textContent = year
-          container.appendChild(yearLabel)
+      // 各年（row）の行
+      const rowsHtml = Array.from({ length: rows }, (_, year) => {
+        const monthCells = Array.from(
+          { length: MONTHS_PER_YEAR },
+          (_, monthIndexInYear) => {
+            const checked = (() => {
+              if (year < age) return "checked"
+              if (year === age && monthIndexInYear < months) return "checked"
+              return ""
+            })()
 
-          // Add checkboxes for this year
-          for (let month = 0; month < 12; month++) {
-            const div = document.createElement("div")
-            const checkbox = document.createElement("input")
-            checkbox.type = "checkbox"
-            const monthIndex = year * 12 + month
-            checkbox.checked = monthIndex < checkedMonths
-            checkbox.disabled = true
+            return `<div class="month-cell ${checked}"></div>`
+          },
+        ).join("")
+        const yearIndex = year % 5 === 0 ? year : "."
 
-            div.appendChild(checkbox)
-            container.appendChild(div)
-          }
-        }
+        return `
+            <div class="year-row">
+              <div class="year-label">${yearIndex}</div>
+              ${monthCells}
+            </div>
+          `
+      }).join("")
+
+      container.innerHTML = headerHtml + rowsHtml
+    }
+
+    function displayMonths() {
+      const birthDate = getQueryDate()
+
+      if (birthDate) {
+        createGrid(birthDate)
+      } else {
+        window.location.href = `index.html`
       }
+    }
 
-      function displayAge() {
-        const { year, month, day } = getBirthParams()
-
-        if (year && month && day) {
-          const months = calculateMonths(year, month, day)
-          createGrid(90 * 12, months)
-        } else {
-          window.location.href = `index.html`
-        }
-      }
-
-      window.onload = displayAge
+    window.onload = displayMonths
     </script>
   </body>
 </html>

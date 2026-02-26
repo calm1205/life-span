@@ -1,134 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:central;text-anchor:middle;font-size:90px;%22>❤️‍🔥</text></svg>"
-    />
+    >
     <title>lifespan</title>
+    <style>
+    :root {
+      font-family: sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    </style>
   </head>
   <body>
-    <p>input your birth date</p>
+    <h1>lifespan</h1>
     <form onsubmit="return false">
-      <select name="year" id="year"></select>
-      <select name="month" id="month"></select>
-      <select name="day" id="day"></select>
+      <label for="birthday">Birthday:</label>
+      <input
+        type="date"
+        id="birthday"
+        name="birthday"
+        value="2000-01-01"
+        min="1900-01-01"
+      >
+    </form>
+
+    <nav>
       <button id="hours-button" type="button">hours</button>
       <button id="days-button" type="button">days</button>
       <button id="weeks-button" type="button">weeks</button>
       <button id="months-button" type="button">months</button>
+    </nav>
+
+    <h2>Your available time</h2>
+    <form onsubmit="return false">
+      <div>
+        <label for="sleep-time">Sleep time par day:</label>
+        <input
+          type="number"
+          id="sleep-time"
+          name="sleep-time"
+          value="8"
+          min="0"
+          max="24"
+        >
+      </div>
+
+      <div>
+        <label for="waste-time">Waste time par day:</label>
+        <input
+          type="number"
+          id="waste-time"
+          name="waste-time"
+          value="2"
+          min="0"
+          max="24"
+        >
+      </div>
+
+      <div>
+        <label for="work-time">Work time par week:</label>
+        <input
+          type="number"
+          id="work-time"
+          name="work-time"
+          value="40"
+          min="0"
+          max="168"
+        >
+      </div>
+
+      <button id="visualize-available-time-button" type="button">
+        visualize available time
+      </button>
     </form>
+
+    <script>
+    const MAX_AGE = 90
+    const today = new Date()
+    const minYear = today.getFullYear() - MAX_AGE
+    const birthdaySelect = document.getElementById("birthday")
+    birthdaySelect.min = `${minYear}-01-01`
+
+    // visualize your lifespan
+    const navigate = (path) => (e) => {
+      e.preventDefault()
+      const birthday = birthdaySelect.value
+      const birthdayDate = new Date(birthday)
+      const year = birthdayDate.getFullYear()
+      const month = birthdayDate.getMonth() + 1
+      const day = birthdayDate.getDate()
+      window.location.href = `${path}.html?year=${year}&month=${month}&day=${day}`
+    }
+
+    const hoursButton = document.getElementById("hours-button")
+    const daysButton = document.getElementById("days-button")
+    const weeksButton = document.getElementById("weeks-button")
+    const monthsButton = document.getElementById("months-button")
+
+    hoursButton.addEventListener("click", navigate("hour"))
+    daysButton.addEventListener("click", navigate("day"))
+    weeksButton.addEventListener("click", navigate("week"))
+    monthsButton.addEventListener("click", navigate("month"))
+
+    // visualize your available time
+    const visualizeAvailableTime = (e) => {
+      e.preventDefault()
+      const birthday = birthdaySelect.value
+      const birthdayDate = new Date(birthday)
+      const year = birthdayDate.getFullYear()
+      const month = birthdayDate.getMonth() + 1
+      const day = birthdayDate.getDate()
+      const sleepTime = document.getElementById("sleep-time").value
+      const wasteTime = document.getElementById("waste-time").value
+      const workTime = document.getElementById("work-time").value
+      window.location.href = `available.html?year=${year}&month=${month}&day=${day}&sleepTime=${sleepTime}&wasteTime=${wasteTime}&workTime=${workTime}`
+    }
+
+    document
+      .getElementById("visualize-available-time-button")
+      .addEventListener("click", visualizeAvailableTime)
+    </script>
   </body>
 </html>
-
-<script>
-  // 現在の日付を取得
-  const now = new Date()
-  const currentYear = now.getFullYear()
-  const currentMonth = now.getMonth() + 1
-  const currentDay = now.getDate()
-
-  // 年の選択肢を生成（現在から100年前まで）
-  const yearSelect = document.getElementById("year")
-  for (let year = currentYear; year >= currentYear - 100; year--) {
-    const option = document.createElement("option")
-    option.value = year
-    option.textContent = year
-    yearSelect.appendChild(option)
-  }
-
-  // 月の選択肢を生成
-  const monthSelect = document.getElementById("month")
-  for (let month = 1; month <= 12; month++) {
-    const option = document.createElement("option")
-    option.value = month
-    option.textContent = month
-    monthSelect.appendChild(option)
-  }
-
-  // 日の選択肢を生成
-  const daySelect = document.getElementById("day")
-  for (let day = 1; day <= 31; day++) {
-    const option = document.createElement("option")
-    option.value = day
-    option.textContent = day
-    daySelect.appendChild(option)
-  }
-
-  // 月が変更されたときに日の選択肢を更新
-  monthSelect.addEventListener("change", updateDays)
-  yearSelect.addEventListener("change", updateDays)
-
-  function updateDays() {
-    const year = parseInt(yearSelect.value)
-    const month = parseInt(monthSelect.value)
-    const daysInMonth = new Date(year, month, 0).getDate()
-
-    // 現在の選択された日を保存
-    const selectedDay = parseInt(daySelect.value)
-
-    // 日の選択肢をクリア
-    daySelect.innerHTML = ""
-
-    // 新しい日の選択肢を生成
-    for (let day = 1; day <= daysInMonth; day++) {
-      const option = document.createElement("option")
-      option.value = day
-      option.textContent = day
-      if (day === selectedDay && day <= daysInMonth) {
-        option.selected = true
-      }
-      daySelect.appendChild(option)
-    }
-  }
-
-  // 初期表示時に現在の日付を選択
-  yearSelect.value = currentYear
-  monthSelect.value = currentMonth
-
-  document
-    .getElementById("hours-button")
-    .addEventListener("click", function (e) {
-      e.preventDefault()
-      const year = yearSelect.value
-      const month = monthSelect.value
-      const day = daySelect.value
-
-      window.location.href = `hour.html?year=${year}&month=${month}&day=${day}`
-    })
-
-  daySelect.value = currentDay
-
-  document
-    .getElementById("days-button")
-    .addEventListener("click", function (e) {
-      e.preventDefault()
-      const year = yearSelect.value
-      const month = monthSelect.value
-      const day = daySelect.value
-
-      window.location.href = `day.html?year=${year}&month=${month}&day=${day}`
-    })
-
-  document
-    .getElementById("weeks-button")
-    .addEventListener("click", function (e) {
-      e.preventDefault()
-      const year = yearSelect.value
-      const month = monthSelect.value
-      const day = daySelect.value
-      window.location.href = `week.html?year=${year}&month=${month}&day=${day}`
-    })
-
-  document
-    .getElementById("months-button")
-    .addEventListener("click", function (e) {
-      e.preventDefault()
-      const year = yearSelect.value
-      const month = monthSelect.value
-      const day = daySelect.value
-      window.location.href = `month.html?year=${year}&month=${month}&day=${day}`
-    })
-</script>

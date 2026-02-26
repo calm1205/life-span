@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%%22 y=%2250%%22 style=%22dominant-baseline:central;text-anchor:middle;font-size:90px;%22>❤️‍🔥</text></svg>"
-    />
+    >
     <title>lifespan | hours</title>
   </head>
   <body>
@@ -14,24 +14,20 @@
     <div id="hours-display"></div>
 
     <script type="module">
-      import { getBirthParams } from "./js/birth.js"
-      import { calculateDays } from "./js/calculateDays.js"
+    import { RemainTime } from "./js/remainTime.js"
 
-      function displayAge() {
-        const { year, month, day } = getBirthParams()
+    function displayHours() {
+      const remainTime = new RemainTime()
+      const hours = remainTime.hours
 
-        if (year && month && day) {
-          const days = calculateDays(year, month, day)
-          const remainingDays = 90 * 365 - days
-          const remainingHours = remainingDays * 24
-          document.getElementById("hours-display").textContent =
-            remainingHours + " hours"
-        } else {
-          window.location.href = `index.html`
-        }
+      if (hours) {
+        document.getElementById("hours-display").textContent = `${hours} hours`
+      } else {
+        window.location.href = `index.html`
       }
+    }
 
-      window.onload = displayAge
+    window.onload = displayHours
     </script>
   </body>
 </html>
