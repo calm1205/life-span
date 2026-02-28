@@ -3,10 +3,8 @@
 }
 body {
   display: flex;
-}
-.side-space {
-  height: 100vh;
-  min-width: 200px;
+  justify-content: center;
+  margin: 0;
 }
 .title {
   text-align: center;
