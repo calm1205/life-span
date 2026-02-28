@@ -1,0 +1,95 @@
+:root {
+  font-family: sans-serif;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 24px 16px;
+}
+h1 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+.container {
+  width: 100%;
+  max-width: 420px;
+}
+.birthday-section {
+  margin-bottom: 16px;
+}
+.birthday-section label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: #666;
+}
+.birthday-section input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin: 16px 0;
+}
+.card h2 {
+  font-size: 1rem;
+  margin: 0 0 16px;
+  color: #333;
+}
+.button-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.button-grid button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.button-grid button:hover {
+  background: #f0f0f0;
+}
+.input-group {
+  margin-bottom: 12px;
+}
+.input-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  color: #666;
+}
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.visualize-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.visualize-button:hover {
+  background: #f0f0f0;
+}

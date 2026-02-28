@@ -7,125 +7,49 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <link rel="manifest" href="assets/manifest.json">
     <title>lifespan</title>
-    <style>
-    :root {
-      font-family: sans-serif;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    </style>
+    <link rel="stylesheet" href="css/index.css">
   </head>
   <body>
     <h1>lifespan</h1>
-    <form onsubmit="return false">
-      <label for="birthday">Birthday:</label>
-      <input
-        type="date"
-        id="birthday"
-        name="birthday"
-        value="2000-01-01"
-        min="1900-01-01"
-      >
-    </form>
+    <div class="container">
+      <form class="birthday-section" onsubmit="return false">
+        <label for="birthday">Birthday</label>
+        <input type="date" id="birthday" name="birthday" value="2000-01-01" min="1900-01-01">
+      </form>
 
-    <nav>
-      <button id="hours-button" type="button">hours</button>
-      <button id="days-button" type="button">days</button>
-      <button id="weeks-button" type="button">weeks</button>
-      <button id="months-button" type="button">months</button>
-    </nav>
+      <section class="card">
+        <h2>Lifespan</h2>
+        <nav class="button-grid">
+          <button id="hours-button" type="button">hours</button>
+          <button id="days-button" type="button">days</button>
+          <button id="weeks-button" type="button">weeks</button>
+          <button id="months-button" type="button">months</button>
+        </nav>
+      </section>
 
-    <h2>Your available time</h2>
-    <form onsubmit="return false">
-      <div>
-        <label for="sleep-time">Sleep time par day:</label>
-        <input
-          type="number"
-          id="sleep-time"
-          name="sleep-time"
-          value="8"
-          min="0"
-          max="24"
-        >
-      </div>
+      <section class="card">
+        <h2>Available Time</h2>
+        <form onsubmit="return false">
+          <div class="input-group">
+            <label for="sleep-time">Sleep time per day</label>
+            <input type="number" id="sleep-time" name="sleep-time" value="8" min="0" max="24">
+          </div>
 
-      <div>
-        <label for="waste-time">Waste time par day:</label>
-        <input
-          type="number"
-          id="waste-time"
-          name="waste-time"
-          value="2"
-          min="0"
-          max="24"
-        >
-      </div>
+          <div class="input-group">
+            <label for="waste-time">Waste time per day</label>
+            <input type="number" id="waste-time" name="waste-time" value="2" min="0" max="24">
+          </div>
 
-      <div>
-        <label for="work-time">Work time par week:</label>
-        <input
-          type="number"
-          id="work-time"
-          name="work-time"
-          value="40"
-          min="0"
-          max="168"
-        >
-      </div>
+          <div class="input-group">
+            <label for="work-time">Work time per week</label>
+            <input type="number" id="work-time" name="work-time" value="40" min="0" max="168">
+          </div>
 
-      <button id="visualize-available-time-button" type="button">
-        visualize available time
-      </button>
-    </form>
+          <button id="visualize-available-time-button" class="visualize-button" type="button">visualize</button>
+        </form>
+      </section>
+    </div>
 
-    <script>
-    const MAX_AGE = 90
-    const today = new Date()
-    const minYear = today.getFullYear() - MAX_AGE
-    const birthdaySelect = document.getElementById("birthday")
-    birthdaySelect.min = `${minYear}-01-01`
-
-    // visualize your lifespan
-    const navigate = (path) => (e) => {
-      e.preventDefault()
-      const birthday = birthdaySelect.value
-      const birthdayDate = new Date(birthday)
-      const year = birthdayDate.getFullYear()
-      const month = birthdayDate.getMonth() + 1
-      const day = birthdayDate.getDate()
-      window.location.href = `${path}.html?year=${year}&month=${month}&day=${day}`
-    }
-
-    const hoursButton = document.getElementById("hours-button")
-    const daysButton = document.getElementById("days-button")
-    const weeksButton = document.getElementById("weeks-button")
-    const monthsButton = document.getElementById("months-button")
-
-    hoursButton.addEventListener("click", navigate("hour"))
-    daysButton.addEventListener("click", navigate("day"))
-    weeksButton.addEventListener("click", navigate("week"))
-    monthsButton.addEventListener("click", navigate("month"))
-
-    // visualize your available time
-    const visualizeAvailableTime = (e) => {
-      e.preventDefault()
-      const birthday = birthdaySelect.value
-      const birthdayDate = new Date(birthday)
-      const year = birthdayDate.getFullYear()
-      const month = birthdayDate.getMonth() + 1
-      const day = birthdayDate.getDate()
-      const sleepTime = document.getElementById("sleep-time").value
-      const wasteTime = document.getElementById("waste-time").value
-      const workTime = document.getElementById("work-time").value
-      window.location.href = `available.html?year=${year}&month=${month}&day=${day}&sleepTime=${sleepTime}&wasteTime=${wasteTime}&workTime=${workTime}`
-    }
-
-    document
-      .getElementById("visualize-available-time-button")
-      .addEventListener("click", visualizeAvailableTime)
-    </script>
+    <script type="module" src="js/index.js"></script>
   </body>
 </html>
