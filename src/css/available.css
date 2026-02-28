@@ -1,38 +1,51 @@
 :root {
   --weeks-per-year: 52;
+  --gap: 1px;
+  --label-width: 20px;
+  --padding: 10px;
+  --cell-size: calc(
+    (min(100vw, 100vh) - var(--padding) * 2 - var(--label-width) - var(--gap) * var(--weeks-per-year)) /
+      (var(--weeks-per-year) + 1)
+  );
 }
 body {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  min-height: 100vh;
 }
 .title {
   text-align: center;
+  font-size: clamp(10px, 1.5vmin, 14px);
+  margin: 4px 0;
 }
-.side-space {
-  height: 100vh;
-  min-width: 100px;
+ul {
+  font-size: clamp(10px, 1.5vmin, 14px);
 }
 .grid-container {
   display: grid;
   place-items: center;
-  grid-template-columns: 20px repeat(var(--weeks-per-year), 12px);
-  gap: 4px;
-  padding: 20px;
+  grid-template-columns: var(--label-width) repeat(var(--weeks-per-year), var(--cell-size));
+  gap: var(--gap);
+  padding: var(--padding);
 }
 .grid-header {
   display: contents;
 }
 .grid-header > div {
   text-align: center;
-  font-size: 12px;
+  font-size: clamp(4px, 1vmin, 12px);
 }
 .grid-row {
   display: contents;
 }
 .week-cell {
-  width: 10px;
-  height: 10px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   border: 1px solid lightgray;
-  border-radius: 2px;
+  border-radius: 1px;
+  box-sizing: border-box;
 }
 .week-cell.lived {
   background-color: lightgray;
@@ -48,7 +61,7 @@ body {
 }
 .row-index {
   text-align: right;
-  font-size: 12px;
+  font-size: clamp(4px, 1vmin, 12px);
   line-height: 1;
 }
 .time-list {
