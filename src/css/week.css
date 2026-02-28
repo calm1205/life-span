@@ -1,18 +1,24 @@
 :root {
   --weeks-per-year: 52;
-  --max-age: 90;
+  --max-rows: 91;
   --gap: 1px;
   --label-width: 20px;
   --padding: 10px;
-  --cell-size: calc(
-    (min(100vw, 100vh) - var(--padding) * 2 - var(--label-width) - var(--gap) * var(--weeks-per-year)) /
+  --header-height: 30px;
+  --cell-size-w: calc(
+    (100vw - var(--padding) * 2 - var(--label-width) - var(--gap) * var(--weeks-per-year)) /
       (var(--weeks-per-year) + 1)
   );
+  --cell-size-h: calc(
+    (100vh - var(--header-height) - var(--padding) * 2 - var(--gap) * var(--max-rows)) /
+      (var(--max-rows) + 1)
+  );
+  --cell-size: min(var(--cell-size-w), var(--cell-size-h));
 }
 body {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   margin: 0;
   min-height: 100vh;
 }
