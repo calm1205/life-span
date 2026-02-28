@@ -7,56 +7,7 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <link rel="manifest" href="assets/manifest.json">
     <title>lifespan | months</title>
-    <style>
-    :root {
-      --months-per-year: 12;
-    }
-    body {
-      display: flex;
-    }
-    .side-space {
-      height: 100vh;
-      min-width: 200px;
-    }
-    .title {
-      text-align: center;
-    }
-    .grid-container {
-      display: grid;
-      place-items: center;
-      grid-template-columns: 20px repeat(var(--months-per-year), 12px);
-      gap: 4px;
-      padding: 20px;
-    }
-    .header-row {
-      display: contents;
-    }
-    .month-label {
-      text-align: center;
-      font-size: 12px;
-    }
-    .year-row {
-      display: contents;
-    }
-    .month-cell {
-      width: 10px;
-      height: 10px;
-      border: 1px solid lightgray;
-      border-radius: 2px;
-    }
-    .month-cell.checked {
-      background-color: lightgray;
-    }
-    .month-cell.current,
-    .month-cell.checked.current {
-      background-color: lightcoral;
-    }
-    .year-label {
-      text-align: right;
-      font-size: 12px;
-      line-height: 1;
-    }
-    </style>
+    <link rel="stylesheet" href="css/month.css">
   </head>
   <body>
     <div class="side-space"></div>
@@ -66,68 +17,6 @@
     </section>
     <div class="side-space"></div>
 
-    <script type="module">
-    import { ElapsedTime } from "./js/elapsedTime.js"
-    import { getAge } from "./js/getAge.js"
-    import { getQueryDate } from "./js/getQueryDate.js"
-
-    const MAX_AGE = 90
-    const MONTHS_PER_YEAR = 12
-    const TOTAL_MONTHS = MAX_AGE * MONTHS_PER_YEAR
-
-    function createGrid(birthDate) {
-      const age = getAge(birthDate)
-      const container = document.getElementById("grid-container")
-      const months = new ElapsedTime(birthDate).months
-      const elapsedTotal = age * MONTHS_PER_YEAR + months
-      const remainMonths = TOTAL_MONTHS - elapsedTotal
-      document.getElementById("title").textContent = `Remain ${remainMonths.toLocaleString()} months.`
-      const rows = Math.ceil(TOTAL_MONTHS / MONTHS_PER_YEAR)
-
-      // ヘッダー（corner + 1〜12ヶ月）
-      const headerHtml = `
-          <div class="header-row">
-            <div class="corner-cell"></div>
-            ${Array.from({ length: MONTHS_PER_YEAR }, (_, i) => `<div class="month-label">${i + 1}</div>`).join("")}
-          </div>
-        `
-
-      // 各年（row）の行
-      const rowsHtml = Array.from({ length: rows }, (_, year) => {
-        const monthCells = Array.from({ length: MONTHS_PER_YEAR }, (_, monthIndexInYear) => {
-          const checked = (() => {
-            if (year === age && monthIndexInYear === months) return "current"
-            if (year < age) return "checked"
-            if (year === age && monthIndexInYear < months) return "checked"
-            return ""
-          })()
-
-          return `<div class="month-cell ${checked}"></div>`
-        }).join("")
-        const yearIndex = year % 5 === 0 ? year : "."
-
-        return `
-            <div class="year-row">
-              <div class="year-label">${yearIndex}</div>
-              ${monthCells}
-            </div>
-          `
-      }).join("")
-
-      container.innerHTML = headerHtml + rowsHtml
-    }
-
-    function displayMonths() {
-      const birthDate = getQueryDate()
-
-      if (birthDate) {
-        createGrid(birthDate)
-      } else {
-        window.location.href = `index.html`
-      }
-    }
-
-    window.onload = displayMonths
-    </script>
+    <script type="module" src="js/month.js"></script>
   </body>
 </html>
