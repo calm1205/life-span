@@ -1,0 +1,72 @@
+:root {
+  --weeks-per-year: 52;
+}
+body {
+  display: flex;
+}
+.title {
+  text-align: center;
+}
+.side-space {
+  height: 100vh;
+  min-width: 100px;
+}
+.grid-container {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 20px repeat(var(--weeks-per-year), 12px);
+  gap: 4px;
+  padding: 20px;
+}
+.grid-header {
+  display: contents;
+}
+.grid-header > div {
+  text-align: center;
+  font-size: 12px;
+}
+.grid-row {
+  display: contents;
+}
+.week-cell {
+  width: 10px;
+  height: 10px;
+  border: 1px solid lightgray;
+  border-radius: 2px;
+}
+.week-cell.lived {
+  background-color: lightgray;
+}
+.week-cell.sleep {
+  background-color: lightblue;
+}
+.week-cell.waste {
+  background-color: lightcoral;
+}
+.week-cell.work {
+  background-color: lightgreen;
+}
+.row-index {
+  text-align: right;
+  font-size: 12px;
+  line-height: 1;
+}
+.time-list {
+  display: inline-block;
+  min-width: 10px;
+  min-height: 10px;
+  border: 1px solid lightgray;
+  border-radius: 2px;
+}
+.lived.time-list {
+  background-color: lightgray;
+}
+.sleep.time-list {
+  background-color: lightblue;
+}
+.waste.time-list {
+  background-color: lightcoral;
+}
+.work.time-list {
+  background-color: lightgreen;
+}
