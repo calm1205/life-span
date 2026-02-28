@@ -8,11 +8,7 @@ export class ElapsedTime {
   constructor(birthDate, today = new Date()) {
     this.birthDate = birthDate
     this.today = today
-    this.thisYearsBirthday = new Date(
-      this.today.getFullYear(),
-      this.birthDate.getMonth(),
-      this.birthDate.getDate(),
-    )
+    this.thisYearsBirthday = new Date(this.today.getFullYear(), this.birthDate.getMonth(), this.birthDate.getDate())
   }
 
   /** 前回の誕生日から現在までの経過週数 */
@@ -29,8 +25,7 @@ export class ElapsedTime {
 
     // 年と月の差分から「完全に経過した月数」を算出する
     let diffMonths =
-      (this.today.getFullYear() - lastBirthday.getFullYear()) * 12 +
-      (this.today.getMonth() - lastBirthday.getMonth())
+      (this.today.getFullYear() - lastBirthday.getFullYear()) * 12 + (this.today.getMonth() - lastBirthday.getMonth())
 
     // 当月の誕生日「日」をまだ迎えていなければ、その月はまだ1ヶ月経過していないので 1 引く
     if (this.today.getDate() < lastBirthday.getDate()) {
@@ -47,10 +42,6 @@ export class ElapsedTime {
   #lastBirthday() {
     return this.#isAfterThisYearBirthday()
       ? this.thisYearsBirthday
-      : new Date(
-          this.thisYearsBirthday.getFullYear() - 1,
-          this.birthDate.getMonth(),
-          this.birthDate.getDate(),
-        )
+      : new Date(this.thisYearsBirthday.getFullYear() - 1, this.birthDate.getMonth(), this.birthDate.getDate())
   }
 }

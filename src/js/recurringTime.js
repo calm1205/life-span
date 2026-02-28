@@ -16,21 +16,15 @@ export class RecurringTime {
    * @param {"daily" | "weekly" | "monthly"} frequency - 繰り返し頻度
    */
   constructor(hours, frequency = FREQUENCIES.DAILY, birthDate) {
-    if (typeof hours !== "number" || Number.isNaN(hours))
-      throw new TypeError("hours must be a valid number")
+    if (typeof hours !== "number" || Number.isNaN(hours)) throw new TypeError("hours must be a valid number")
     if (!Object.values(FREQUENCIES).includes(frequency))
       throw new Error('frequency must be one of "daily" | "weekly" | "monthly"')
-    if (!(birthDate instanceof Date))
-      throw new Error("birthDate must be a Date")
+    if (!(birthDate instanceof Date)) throw new Error("birthDate must be a Date")
 
     this.hours = hours
     this.frequency = frequency
     this.fromDate = new Date()
-    const endDate = new Date(
-      birthDate.getFullYear() + this.#MAX_AGE,
-      birthDate.getMonth(),
-      birthDate.getDate(),
-    )
+    const endDate = new Date(birthDate.getFullYear() + this.#MAX_AGE, birthDate.getMonth(), birthDate.getDate())
     this.toDate = endDate
   }
 

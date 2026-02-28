@@ -10,7 +10,6 @@
     <style>
     :root {
       --weeks-per-year: 52;
-      --max-age: 90;
     }
     body {
       display: flex;
@@ -115,8 +114,7 @@
     import { getAge } from "./js/getAge.js"
     import { getQueryDate } from "./js/getQueryDate.js"
     import { getQueryTime } from "./js/getQueryTime.js"
-    import { FREQUENCIES } from "./js/recurringTime.js"
-    import { RecurringTime } from "./js/recurringTime.js"
+    import { FREQUENCIES, RecurringTime } from "./js/recurringTime.js"
 
     const MAX_AGE = 90
     const WEEKS_PER_YEAR = 52
@@ -127,34 +125,19 @@
       const container = document.getElementById("grid-container")
       const elapsedWeeks = new ElapsedTime(birthDate).weeks
       const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
-      const weekParYears = Array.from(
-        { length: WEEKS_PER_YEAR },
-        (_, i) => i + 1,
-      )
+      const weekPerYears = Array.from({ length: WEEKS_PER_YEAR }, (_, i) => i + 1)
 
       // ヘッダー行（corner + 1〜52）
       const headerHtml = `
           <div id="header-row" class="grid-header">
             <div id="corner-cell"></div>
-            ${weekParYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
+            ${weekPerYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
           </div>
         `
 
-      const sleepRecurring = new RecurringTime(
-        sleepTime,
-        FREQUENCIES.DAILY,
-        birthDate,
-      )
-      const wasteRecurring = new RecurringTime(
-        wasteTime,
-        FREQUENCIES.DAILY,
-        birthDate,
-      )
-      const workRecurring = new RecurringTime(
-        workTime,
-        FREQUENCIES.WEEKLY,
-        birthDate,
-      )
+      const sleepRecurring = new RecurringTime(sleepTime, FREQUENCIES.DAILY, birthDate)
+      const wasteRecurring = new RecurringTime(wasteTime, FREQUENCIES.DAILY, birthDate)
+      const workRecurring = new RecurringTime(workTime, FREQUENCIES.WEEKLY, birthDate)
 
       const livedWeekCount = age * WEEKS_PER_YEAR + elapsedWeeks
       const sleepWeekCount = sleepRecurring.getTotalWeeks()
@@ -163,22 +146,16 @@
 
       let weekCount = 0
       const rowsHtml = Array.from({ length: rows }, (_, row) => {
-        const weekCells = weekParYears
+        const weekCells = weekPerYears
           .map((_) => {
             const label = (() => {
               if (weekCount < livedWeekCount) {
                 return "lived"
               } else if (weekCount < livedWeekCount + sleepWeekCount) {
                 return "sleep"
-              } else if (
-                weekCount <
-                livedWeekCount + sleepWeekCount + wasteWeekCount
-              ) {
+              } else if (weekCount < livedWeekCount + sleepWeekCount + wasteWeekCount) {
                 return "waste"
-              } else if (
-                weekCount <
-                livedWeekCount + sleepWeekCount + wasteWeekCount + workWeekCount
-              ) {
+              } else if (weekCount < livedWeekCount + sleepWeekCount + wasteWeekCount + workWeekCount) {
                 return "work"
               }
               return ""

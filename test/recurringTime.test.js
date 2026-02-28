@@ -14,12 +14,8 @@ describe("RecurringTime", () => {
     it("hours が数値でない場合は TypeError を投げる", () => {
       const birthDate = new Date(1990, 0, 1)
 
-      expect(
-        () => new RecurringTime("2", FREQUENCIES.DAILY, birthDate),
-      ).toThrow(TypeError)
-      expect(
-        () => new RecurringTime(Number.NaN, FREQUENCIES.DAILY, birthDate),
-      ).toThrow(TypeError)
+      expect(() => new RecurringTime("2", FREQUENCIES.DAILY, birthDate)).toThrow(TypeError)
+      expect(() => new RecurringTime(Number.NaN, FREQUENCIES.DAILY, birthDate)).toThrow(TypeError)
     })
 
     it('frequency が "daily" | "weekly" | "monthly" 以外の場合は Error を投げる', () => {
@@ -31,25 +27,15 @@ describe("RecurringTime", () => {
     })
 
     it("birthDate が Date でない場合は Error を投げる", () => {
-      expect(
-        () => new RecurringTime(2, FREQUENCIES.DAILY, "2000-01-01"),
-      ).toThrow("birthDate must be a Date")
+      expect(() => new RecurringTime(2, FREQUENCIES.DAILY, "2000-01-01")).toThrow("birthDate must be a Date")
     })
   })
 
   describe("getTotalWeeks", () => {
     it("hours が 0 以下の場合は 0 を返す", () => {
       const birthDate = new Date(1990, 0, 1)
-      const recurringTimeZero = new RecurringTime(
-        0,
-        FREQUENCIES.DAILY,
-        birthDate,
-      )
-      const recurringTimeNegative = new RecurringTime(
-        -1,
-        FREQUENCIES.DAILY,
-        birthDate,
-      )
+      const recurringTimeZero = new RecurringTime(0, FREQUENCIES.DAILY, birthDate)
+      const recurringTimeNegative = new RecurringTime(-1, FREQUENCIES.DAILY, birthDate)
 
       expect(recurringTimeZero.getTotalWeeks()).toBe(0)
       expect(recurringTimeNegative.getTotalWeeks()).toBe(0)
@@ -97,11 +83,7 @@ describe("RecurringTime", () => {
 
     it("MONTHLY の場合、期間内の月数分だけ回数をカウントして累計時間を週に換算する", () => {
       const birthDate = new Date(1990, 0, 1)
-      const recurringTime = new RecurringTime(
-        10,
-        FREQUENCIES.MONTHLY,
-        birthDate,
-      )
+      const recurringTime = new RecurringTime(10, FREQUENCIES.MONTHLY, birthDate)
 
       // 2024-01-01 〜 2024-04-01 (3 ヶ月分の発生を想定)
       recurringTime.fromDate = new Date(2024, 0, 1)

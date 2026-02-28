@@ -10,12 +10,7 @@ export function getQueryTime(search = window.location.search) {
   const wasteTime = Number(params.get("wasteTime"))
   const workTime = Number(params.get("workTime"))
 
-  if (
-    Number.isNaN(sleepTime) ||
-    Number.isNaN(wasteTime) ||
-    Number.isNaN(workTime)
-  )
-    return null
+  if (Number.isNaN(sleepTime) || Number.isNaN(wasteTime) || Number.isNaN(workTime)) return null
 
   return { sleepTime, wasteTime, workTime }
 }

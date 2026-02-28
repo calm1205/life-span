@@ -16,8 +16,7 @@ export function getQueryDate(search = window.location.search) {
   const m = Number(month)
   const d = Number(day)
 
-  if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d))
-    return null
+  if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) return null
 
   // JavaScript の Date コンストラクタは month が 0 始まりなので 1 を引く
   const date = new Date(y, m - 1, d)

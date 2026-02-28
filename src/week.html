@@ -10,7 +10,6 @@
     <style>
     :root {
       --weeks-per-year: 52;
-      --max-age: 90;
     }
     body {
       display: flex;
@@ -89,22 +88,19 @@
       const remainWeeks = TOTAL_WEEKS - elapsedTotal
       document.getElementById("title").textContent = `Remain ${remainWeeks.toLocaleString()} weeks.`
       const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
-      const weekParYears = Array.from(
-        { length: WEEKS_PER_YEAR },
-        (_, i) => i + 1,
-      )
+      const weekPerYears = Array.from({ length: WEEKS_PER_YEAR }, (_, i) => i + 1)
 
       // ヘッダー行（corner + 1〜52）
       const headerHtml = `
           <div id="header-row" class="grid-header">
             <div id="corner-cell"></div>
-            ${weekParYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
+            ${weekPerYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
           </div>
         `
 
       // 各年（row）の行
       const rowsHtml = Array.from({ length: rows }, (_, row) => {
-        const weekCells = weekParYears
+        const weekCells = weekPerYears
           .map((col) => {
             const checked = (() => {
               const currentWeekCol = Math.min(weeks + 1, WEEKS_PER_YEAR)

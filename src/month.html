@@ -88,28 +88,22 @@
       const headerHtml = `
           <div class="header-row">
             <div class="corner-cell"></div>
-            ${Array.from(
-              { length: MONTHS_PER_YEAR },
-              (_, i) => `<div class="month-label">${i + 1}</div>`,
-            ).join("")}
+            ${Array.from({ length: MONTHS_PER_YEAR }, (_, i) => `<div class="month-label">${i + 1}</div>`).join("")}
           </div>
         `
 
       // 各年（row）の行
       const rowsHtml = Array.from({ length: rows }, (_, year) => {
-        const monthCells = Array.from(
-          { length: MONTHS_PER_YEAR },
-          (_, monthIndexInYear) => {
-            const checked = (() => {
-              if (year === age && monthIndexInYear === months) return "current"
-              if (year < age) return "checked"
-              if (year === age && monthIndexInYear < months) return "checked"
-              return ""
-            })()
+        const monthCells = Array.from({ length: MONTHS_PER_YEAR }, (_, monthIndexInYear) => {
+          const checked = (() => {
+            if (year === age && monthIndexInYear === months) return "current"
+            if (year < age) return "checked"
+            if (year === age && monthIndexInYear < months) return "checked"
+            return ""
+          })()
 
-            return `<div class="month-cell ${checked}"></div>`
-          },
-        ).join("")
+          return `<div class="month-cell ${checked}"></div>`
+        }).join("")
         const yearIndex = year % 5 === 0 ? year : "."
 
         return `
