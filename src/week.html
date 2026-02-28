@@ -7,56 +7,7 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <link rel="manifest" href="assets/manifest.json">
     <title>lifespan | weeks</title>
-    <style>
-    :root {
-      --weeks-per-year: 52;
-    }
-    body {
-      display: flex;
-    }
-    .title {
-      text-align: center;
-    }
-    .side-space {
-      height: 100vh;
-      min-width: 100px;
-    }
-    .grid-container {
-      display: grid;
-      place-items: center;
-      grid-template-columns: 20px repeat(var(--weeks-per-year), 12px);
-      gap: 4px;
-      padding: 20px;
-    }
-    .grid-header {
-      display: contents;
-    }
-    .grid-header > div {
-      text-align: center;
-      font-size: 12px;
-    }
-    .grid-row {
-      display: contents;
-    }
-    .week-cell {
-      width: 10px;
-      height: 10px;
-      border: 1px solid lightgray;
-      border-radius: 2px;
-    }
-    .week-cell.checked {
-      background-color: lightgray;
-    }
-    .week-cell.current,
-    .week-cell.checked.current {
-      background-color: lightcoral;
-    }
-    .row-index {
-      text-align: right;
-      font-size: 12px;
-      line-height: 1;
-    }
-    </style>
+    <link rel="stylesheet" href="css/week.css">
   </head>
 
   <body>
@@ -71,74 +22,6 @@
     </section>
     <div class="side-space"></div>
 
-    <script type="module">
-    import { ElapsedTime } from "./js/elapsedTime.js"
-    import { getAge } from "./js/getAge.js"
-    import { getQueryDate } from "./js/getQueryDate.js"
-
-    const MAX_AGE = 90
-    const WEEKS_PER_YEAR = 52
-    const TOTAL_WEEKS = MAX_AGE * WEEKS_PER_YEAR
-
-    function createGrid(birthDate) {
-      const age = getAge(birthDate)
-      const container = document.getElementById("grid-container")
-      const weeks = new ElapsedTime(birthDate).weeks
-      const elapsedTotal = age * WEEKS_PER_YEAR + weeks
-      const remainWeeks = TOTAL_WEEKS - elapsedTotal
-      document.getElementById("title").textContent = `Remain ${remainWeeks.toLocaleString()} weeks.`
-      const rows = Math.ceil(TOTAL_WEEKS / WEEKS_PER_YEAR)
-      const weekPerYears = Array.from({ length: WEEKS_PER_YEAR }, (_, i) => i + 1)
-
-      // ヘッダー行（corner + 1〜52）
-      const headerHtml = `
-          <div id="header-row" class="grid-header">
-            <div id="corner-cell"></div>
-            ${weekPerYears.map((week) => `<div>${week % 5 === 0 ? week : "."}</div>`).join("")}
-          </div>
-        `
-
-      // 各年（row）の行
-      const rowsHtml = Array.from({ length: rows }, (_, row) => {
-        const weekCells = weekPerYears
-          .map((col) => {
-            const checked = (() => {
-              const currentWeekCol = Math.min(weeks + 1, WEEKS_PER_YEAR)
-              if (row === age && col === currentWeekCol) return "current"
-              if (row < age) return "checked"
-              if (row === age && col < currentWeekCol) return "checked"
-              return ""
-            })()
-
-            return `<div class="week-cell ${checked}"></div>`
-          })
-          .join("")
-
-        const rowIndex = row % 5 === 0 ? row : "."
-
-        return `
-            <div class="grid-row">
-              <div class="row-index">${rowIndex}</div>
-              ${weekCells}
-            </div>
-          `
-      }).join("")
-
-      // コンテナにまとめて流し込む
-      container.innerHTML = headerHtml + rowsHtml
-    }
-
-    function displayWeeks() {
-      const birthDate = getQueryDate()
-
-      if (birthDate) {
-        createGrid(birthDate)
-      } else {
-        window.location.href = `index.html`
-      }
-    }
-
-    window.onload = displayWeeks
-    </script>
+    <script type="module" src="js/week.js"></script>
   </body>
 </html>
