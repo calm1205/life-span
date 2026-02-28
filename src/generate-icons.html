@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>Icon Generator</title>
+  </head>
+  <body>
+    <h1>PWA Icon Generator</h1>
+    <p>下のリンクを右クリック → 「名前を付けてリンク先を保存」で保存</p>
+    <div id="output"></div>
+    <script>
+      const sizes = [192, 512]
+
+      for (const size of sizes) {
+        const canvas = document.createElement("canvas")
+        canvas.width = size
+        canvas.height = size
+        const ctx = canvas.getContext("2d")
+
+        ctx.fillStyle = "#ffffff"
+        ctx.fillRect(0, 0, size, size)
+
+        ctx.font = `${size * 0.75}px serif`
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.fillText("❤️‍🔥", size / 2, size / 2)
+
+        const link = document.createElement("a")
+        link.href = canvas.toDataURL("image/png")
+        link.download = `icon-${size}.png`
+        link.textContent = `icon-${size}.png をダウンロード`
+        link.style.display = "block"
+        link.style.margin = "10px 0"
+
+        document.getElementById("output").appendChild(link)
+      }
+    </script>
+  </body>
+</html>
