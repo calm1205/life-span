@@ -32,17 +32,17 @@
         <form onsubmit="return false">
           <div class="input-group">
             <label for="sleep-time">Sleep time per day</label>
-            <input type="number" id="sleep-time" name="sleep-time" value="8" min="0" max="24">
+            <input type="number" id="sleep-time" name="sleep-time" value="8" min="0" max="24" inputmode="numeric">
           </div>
 
           <div class="input-group">
             <label for="waste-time">Waste time per day</label>
-            <input type="number" id="waste-time" name="waste-time" value="2" min="0" max="24">
+            <input type="number" id="waste-time" name="waste-time" value="2" min="0" max="24" inputmode="numeric">
           </div>
 
           <div class="input-group">
             <label for="work-time">Work time per week</label>
-            <input type="number" id="work-time" name="work-time" value="40" min="0" max="168">
+            <input type="number" id="work-time" name="work-time" value="40" min="0" max="168" inputmode="numeric">
           </div>
 
           <button id="visualize-available-time-button" class="visualize-button" type="button">visualize</button>
